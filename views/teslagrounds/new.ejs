@@ -1,0 +1,54 @@
+<% layout ('layouts/boilerplate')%>
+    <div class="row">
+        <h1 class="text-center"> Add a New Teslaground</h1>
+        <div class="col-6 offset-3">
+            <form action="/teslagrounds" method="POST" novalidate class='validated-form'>
+                <div class="mb-4">
+                    <label class="form-label" for="title">Title:</label>
+                    <input class="form-control" type="text" id="title" name="teslaground[title]" required>
+                    <div class="valid-feedback">
+                        Valid Title!
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="location">Location:</label>
+                    <input class="form-control" type="text" id="location" name="teslaground[location]" required>
+                    <div class="valid-feedback">
+                        Valid Location!
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="image">Image Link:</label>
+                    <input class="form-control" type="text" id="image" name="teslaground[image]" required>
+                    <div class="valid-feedback">
+                        Valid Image Link!
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="price">Teslaground Price ($):</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="price-label">$</span>
+                        </div>
+                        <input type="text" class="form-control" id="price" placeholder="0.00" name="teslaground[price]"
+                            aria-label="price" aria-describedby="price-label" required>
+                    </div>
+                    <div class="valid-feedback">
+                        Valid Price!
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="description">Description:</label>
+                    <textarea class="form-control" type="text" id="description" name="teslaground[description]"
+                        required></textarea>
+                    <div class="valid-feedback">
+                        Valid Description!
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <button class='btn btn-success'>Add Teslaground</button>
+                </div>
+            </form>
+            <a href="/teslagrounds">Back to ALL Teslagrounds</a>
+        </div>
+    </div>

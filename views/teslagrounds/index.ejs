@@ -1,0 +1,32 @@
+<% layout ('layouts/boilerplate')%>
+    <h1>All Teslagrounds</h1>
+    <div>
+        <a href="/teslagrounds/new">Add a NEW Teslaground</a>
+    </div>
+    <% for (let teslaground of teslagrounds) { %>
+        <div class="card" mb-3>
+            <div class="row">
+                <div class="col-md-3">
+                    <img class="img-fluid" alt="" src="<%= teslaground.image %>">
+                </div>
+                <div class="col-md-9">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= teslaground.title %>
+                        </h5>
+                        <p class="card-text">
+                            <%=teslaground.description %>
+                        </p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                <%= teslaground.location %>
+                            </small>
+                        </p>
+                        <a class="btn btn-info" href="/teslagrounds/<%=teslaground._id%>">
+                            View - <%=teslaground.title%>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>

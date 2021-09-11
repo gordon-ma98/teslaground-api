@@ -1,0 +1,72 @@
+<% layout ('layouts/boilerplate')%>
+    <div class="row">
+        <div class="col-8">
+            <div class="card mb-4">
+                <img class="card-img-top" src="<%= teslaground.image %>" alt="Image Unavailable">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= teslaground.title %>
+                    </h5>
+                    <p class="card-text">
+                        <%= teslaground.description %>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-muted">
+                        Location: <%= teslaground.location %>
+                    </li>
+                    <li class="list-group-item text-muted">
+                        Price: $<%= teslaground.price %>/refuel
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <a href=" /teslagrounds/<%=teslaground._id%>/edit" class="card-link btn btn-primary">Edit this
+                        Teslaground</a>
+                    <form class='d-inline' action="/teslagrounds/<%=teslaground._id%>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">Delete Teslaground</button>
+                    </form>
+                </div>
+                <div class="card-footer text-muted">
+                    Last Updated: 2 days ago
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <h3>Leave a Review:</h3>
+            <form action="/teslagrounds/<%=teslaground._id%>/reviews" class="mb-4 validated-form" method="POST"
+                novalidate>
+                <div class="mb-2">
+                    <label class="form-label" for="rating">Enter Your Rating:</label>
+                    <input class="form-range" type="range" min="0" max="5" name="review[rating]" id="rating">
+                </div>
+                <div class="mb-4">
+                    <label class="form-label" for="body">Enter Your Review:</label>
+                    <textarea class="form-control" name="review[body]" id="body" cols="30" rows="4" required></textarea>
+                    <div class="valid-feedback">
+                        Valid Review Description!
+                    </div>
+                </div>
+                <button class="btn btn-info">Submit Your Review</button>
+            </form>
+            <hr>
+            <% for (let review of teslaground.reviews) {%>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Review Rating: <%= review.rating %>
+                        </h5>
+                        <p class="card-text">Review Description: <%= review.body %>
+                        </p>
+                        <form action="/teslagrounds/<%=teslaground._id%>/reviews/<%=review._id%>?_method=DELETE"
+                            method="POST">
+                            <button class="btn btn-sm btn-danger">
+                                DELETE
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                <% }; %>
+        </div>
+    </div>
+    <footer>
+        <a href="/teslagrounds">Back to All Teslagrounds</a>
+    </footer>
