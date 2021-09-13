@@ -7,8 +7,13 @@ const flash = require('connect-flash');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 
-const teslagrounds = require('./routes/teslaground');
-const reviews = require('./routes/reviews');
+const passport = require('passport');
+const LocalStrat = require('passport-local');
+const User = require('./models/user');
+
+const usersRoutes = require('./routes/users');
+const teslagroundsRoutes = require('./routes/teslaground');
+const reviewsRoutes = require('./routes/reviews');
 
 // Mongoose Connect
 mongoose.connect('mongodb://localhost:27017/tesla-camp', {
@@ -46,17 +51,34 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig));
 
-// Creating Flashes and Flash Middleware
+// Initalizing Passport:
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrat(User.authenticate()));
+
+passport.serializeUser(User.serializeUser()); // Storing User in Session
+passport.deserializeUser(User.deserializeUser()); // Getting User out of Session
+
+// Creating Flashes and Flash/Passport Middleware
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    res.locals.currentUser = req.user; // Passport Auto-generates this to display if there is an active user
     next();
 });
 
+// Hardcode User
+app.get('/fakeuser', async (req, res) => {
+    const user = new User({ email: '123@gmail.com', username: '123' });
+    const newUser = await User.register(user, '123');
+    res.send(newUser);
+})
+
 // Connect to Routes
-app.use('/teslagrounds', teslagrounds);
-app.use('/teslagrounds/:id/reviews', reviews);
+app.use('/', usersRoutes);
+app.use('/teslagrounds', teslagroundsRoutes);
+app.use('/teslagrounds/:id/reviews', reviewsRoutes);
 //app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {

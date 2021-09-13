@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const { teslagroundSchema } = require('../schemas.js');
+const { isLoggedIn } = require('../midware.js');
+
 const ExpressError = require('../utils/ExpressError');
 const Teslaground = require('../models/teslaground');
 
@@ -24,12 +26,12 @@ router.get('/', catchAsync(async (req, res) => {
 }));
 
 // Display Create
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('teslagrounds/new');
 });
 
 // Post Create
-router.post('/', validateTeslaground, catchAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateTeslaground, catchAsync(async (req, res, next) => {
     // if (!req.body.teslaground) throw new ExpressError('Invalid Teslaground Data', 400);
     const teslaground = new Teslaground(req.body.teslaground);
     await teslaground.save();
@@ -48,7 +50,7 @@ router.get('/:id', catchAsync(async (req, res) => {
 }));
 
 // Display Update/Edit
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const teslaground = await Teslaground.findById(req.params.id);
     if (!teslaground) {
         req.flash('error', 'This Teslaground Cannot be Found!');
@@ -58,7 +60,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 }));
 
 // Put (Patching)
-router.put('/:id', validateTeslaground, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, validateTeslaground, catchAsync(async (req, res) => {
     const { id } = req.params;
     const teslaground = await Teslaground.findByIdAndUpdate(id, { ...req.body.teslaground });
     req.flash('success', 'This Teslaground has been Successfully Updated!');
@@ -66,7 +68,7 @@ router.put('/:id', validateTeslaground, catchAsync(async (req, res) => {
 }));
 
 // Delete
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params;
     await Teslaground.findByIdAndDelete(id);
     req.flash('success', 'The Teslaground has been Removed!');
