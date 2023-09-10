@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
-// This is solely for Emil
+// This is solely for Email
 const UserSchema = new Schema({
     email: {
         type: String,
